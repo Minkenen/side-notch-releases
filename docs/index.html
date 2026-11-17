@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Side Notch – a panel at the edge of your screen</title>
+<meta name="description" content="Side Notch is a thin line at the left edge of your screen. Point at it and a panel of small boxes slides out: music, calendar, weather, notes, clipboard and more. For Mac and Windows.">
+<link rel="icon" href="favicon.png">
+<style>
+:root{--bg:#0B0B0D;--card:#161618;--line:#26262A;--text:#F5F5F7;--dim:#A1A1A6;--faint:#6E6E73;--accent:#8C8AFF;--accent2:#4CC2FF;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI Variable Text','Segoe UI',Inter,system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+.edge{position:fixed;left:0;top:50%;width:5px;height:22vh;transform:translateY(-50%);border-radius:0 4px 4px 0;background:linear-gradient(var(--accent),var(--accent2));box-shadow:0 0 24px rgba(124,122,255,.7);z-index:5}
+header{padding:28px 0}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;text-decoration:none}
+.brand img{width:28px;height:28px}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding:56px 0 72px}
+h1{font-size:clamp(36px,5.4vw,60px);line-height:1.04;letter-spacing:-.03em;margin:0 0 18px;font-weight:800}
+h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:18px;color:var(--dim);margin:0 0 30px;max-width:520px}
+.dl{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.btn{display:inline-flex;align-items:center;gap:12px;height:54px;padding:0 24px;border-radius:27px;background:var(--text);color:#000;font-weight:700;font-size:16px;text-decoration:none;transition:transform 160ms ease,background 160ms ease}
+.btn:hover{transform:translateY(-1px);background:#FFFFFF}
+.btn:focus-visible,.alt:focus-visible{outline:2px solid var(--accent2);outline-offset:3px}
+.btn small{font-weight:600;color:#555;font-size:13px}
+.alt{font-size:14px;color:var(--dim);text-decoration:underline;text-underline-offset:3px}
+.alt:hover{color:var(--text)}
+.ver{font-size:13px;color:var(--faint)}
+.icon{justify-self:center;width:min(320px,70vw);filter:drop-shadow(0 30px 60px rgba(90,88,255,.25))}
+section{padding:56px 0;border-top:1px solid var(--line)}
+h2{font-size:28px;letter-spacing:-.02em;margin:0 0 10px}
+.sub{color:var(--dim);margin:0 0 28px;max-width:640px}
+.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.shot{aspect-ratio:16/10;border-radius:16px;border:1.5px dashed #34343A;background:var(--card);display:flex;align-items:center;justify-content:center;color:var(--faint);font-size:13px;text-align:center;padding:12px;overflow:hidden}
+.shot img{width:100%;height:100%;object-fit:cover}
+.mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.mod{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.mod b{display:block;font-size:15px;margin-bottom:2px}
+.mod span{color:var(--dim);font-size:14px}
+.mod i{font-style:normal;font-size:11px;font-weight:700;color:#FF9F0A;margin-left:6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.box h3{margin:0 0 10px;font-size:17px}
+.box ol,.box ul{margin:0;padding-left:20px;color:var(--dim)}
+.box li{margin:6px 0}
+.box b{color:var(--text)}
+footer{padding:36px 0 56px;color:var(--faint);font-size:13px;border-top:1px solid var(--line)}
+@media (max-width:820px){.hero{grid-template-columns:1fr;padding-top:24px;gap:24px}.icon{grid-row:1;width:180px}.shots,.two{grid-template-columns:1fr}.edge{display:none}.btn small{display:none}.btn{white-space:nowrap}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+</style>
+</head>
+<body>
+<span class="edge" aria-hidden="true"></span>
+<header class="wrap"><a class="brand" href="#"><img src="icon.png" alt="">Side Notch</a></header>
+<main class="wrap">
+  <div class="hero">
+    <div>
+      <h1>Everything you glance at, <span>one edge away.</span></h1>
+      <p class="lead">Side Notch is a thin line at the left edge of your screen. Point at it and a panel slides out with your music, calendar, weather, notes, clipboard and more. Move away and it's gone.</p>
+      <div class="dl">
+        <a class="btn" id="primary" href="https://github.com/minkenen/side-notch-releases/releases/latest/download/Side-Notch-mac.dmg">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"></path></svg>
+          <span id="primaryText">Download for Mac</span> <small id="primaryNote">Apple silicon &amp; Intel</small>
+        </a>
+        <a class="alt" id="secondary" href="https://github.com/minkenen/side-notch-releases/releases/latest/download/Side-Notch-Setup.exe">Also for Windows</a>
+        <span class="ver" id="ver">Free · updates itself</span>
+      </div>
+    </div>
+    <img class="icon" src="icon.png" alt="The Side Notch icon: a dark tile with a glowing line at its left edge">
+  </div>
+
+  <section aria-labelledby="see">
+    <h2 id="see">See it</h2>
+    <p class="sub">The panel opens from the line and closes when you move away. Arrange the boxes how you like, in one or more columns.</p>
+    <div class="shots">
+      <!-- Screenshots: put the images next to this file and replace each placeholder with <img src="…" alt="…"> -->
+      <div class="shot">Screenshot: the line at the screen edge</div>
+      <div class="shot">Screenshot: the open panel</div>
+      <div class="shot">Screenshot: a box up close</div>
+    </div>
+  </section>
+
+  <section aria-labelledby="boxes">
+    <h2 id="boxes">The boxes</h2>
+    <p class="sub">Pick the ones you want. Each one opens wider with its handle when you need more.</p>
+    <div class="mods">
+      <div class="mod"><b>Music</b><span>What's playing in any app, with controls and volume.</span></div>
+      <div class="mod"><b>Calendar</b><span>Your Google, Outlook or iCloud calendars, and the line blinks before a meeting.</span></div>
+      <div class="mod"><b>Weather &amp; world clocks</b><span>Your city and the places you care about.</span></div>
+      <div class="mod"><b>Mail</b><span>Your inbox over IMAP, with quick replies.</span></div>
+      <div class="mod"><b>Messages</b><i>Mac</i><span>New messages from Discord, Messenger, Messages and more.</span></div>
+      <div class="mod"><b>Clipboard</b><span>The last 50 things you copied: text, links, colors and images.</span></div>
+      <div class="mod"><b>Shelf</b><span>Drop files on the panel and drag them out later.</span></div>
+      <div class="mod"><b>Notes, to-dos &amp; focus timer</b><span>Kept on your computer.</span></div>
+      <div class="mod"><b>Mind board</b><span>A free canvas for notes, drawings, images and arrows.</span></div>
+      <div class="mod"><b>Photos</b><span>Your photos as a deck of cards. On Mac, straight from your Photos library.</span></div>
+      <div class="mod"><b>Stocks</b><span>An old-school ticker and a split-flap board.</span></div>
+      <div class="mod"><b>Chords</b><span>Play chords and drum loops in eight genres, with your keyboard.</span></div>
+      <div class="mod"><b>System &amp; batteries</b><span>CPU, memory, network and battery.</span></div>
+      <div class="mod"><b>Apps, mirror &amp; world map</b><span>Launch favourites, check your camera, watch the globe turn.</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="get">
+    <h2 id="get">Install once. It keeps itself up to date.</h2>
+    <p class="sub">When a new version is out, Side Notch downloads it in the background. A red dot appears on the settings button, and one click restarts into the new version. You never need to come back here.</p>
+    <div class="two">
+      <div class="box">
+        <h3>Mac</h3>
+        <ol>
+          <li>Open <b>Side-Notch-mac.dmg</b> and drag Side Notch to Applications.</li>
+          <li>Open it. Point at the left edge of your screen, or press <b>⌥ Space</b>.</li>
+          <li>Some boxes ask for permission the first time, like Messages (Accessibility) or Photos. You choose.</li>
+        </ol>
+      </div>
+      <div class="box">
+        <h3>Windows</h3>
+        <ol>
+          <li>Run <b>Side-Notch-Setup.exe</b>. It installs for you only, no admin needed.</li>
+          <li>If Windows shows "Windows protected your PC", click <b>More info</b>, then <b>Run anyway</b>.</li>
+          <li>Point at the left edge of your screen, or press <b>Ctrl Alt N</b>.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="win">
+    <h2 id="win">On Windows</h2>
+    <p class="sub">Side Notch runs on Windows 10 and 11. A few things lean on macOS and aren't there yet:</p>
+    <div class="box">
+      <ul>
+        <li><b>Messages</b>: reading new messages from notifications is Mac only.</li>
+        <li><b>Photos</b>: the automatic Photos library is Mac only. On Windows you add pictures or folders yourself.</li>
+        <li><b>System</b>: GPU load and power use are shown on Mac only.</li>
+        <li><b>Batteries</b>: Bluetooth devices like headphones and mice are shown on Mac only.</li>
+        <li><b>Shelf</b>: AirDrop and the share menu are Mac only. Files can still be dragged out and zipped.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+<footer class="wrap">Side Notch · <a href="https://github.com/minkenen/side-notch-releases/releases">All versions and release notes</a></footer>
+<script>
+// the right download first, and the version number from the latest release
+(function () {
+  var base = 'https://github.com/minkenen/side-notch-releases/releases/latest/download/';
+  var ua = navigator.userAgent, plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+  var win = /Win/i.test(plat) || /Windows/i.test(ua);
+  if (win) {
+    document.getElementById('primary').href = base + 'Side-Notch-Setup.exe';
+    document.getElementById('primaryText').textContent = 'Download for Windows';
+    document.getElementById('primaryNote').textContent = 'Windows 10 & 11';
+    var s = document.getElementById('secondary'); s.href = base + 'Side-Notch-mac.dmg'; s.textContent = 'Also for Mac';
+  }
+  fetch('https://api.github.com/repos/minkenen/side-notch-releases/releases/latest').then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+    if (j && j.tag_name) document.getElementById('ver').textContent = 'Version ' + j.tag_name.replace(/^v/, '') + ' · Free · updates itself';
+  }).catch(function () {});
+})();
+</script>
+</body>
+</html>
