@@ -204,7 +204,20 @@ footer{padding:36px 0 56px;color:var(--faint);font-size:13px;border-top:1px soli
   }
   // the hero video stays still for people who'd rather not have motion
   var hv = document.getElementById('heroVideo');
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { hv.removeAttribute('autoplay'); hv.pause(); hv.controls = true; }
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (still) { hv.removeAttribute('autoplay'); hv.pause(); hv.controls = true; }
+  else {
+    // keep it looping forever: some browsers stop a looping video after a while or when it was scrolled away,
+    // so it starts again from the beginning whenever it ends, stalls or gets paused by the browser
+    var again = function () { if (document.hidden) return; var p = hv.play(); if (p && p.catch) p.catch(function () {}); };
+    hv.loop = true;
+    hv.addEventListener('ended', function () { hv.currentTime = 0; again(); });
+    hv.addEventListener('pause', function () { setTimeout(again, 120); });
+    hv.addEventListener('stalled', again);
+    document.addEventListener('visibilitychange', again);
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { if (es[0].isIntersecting) again(); }).observe(hv);
+    setInterval(function () { if (hv.paused) again(); }, 2000);
+  }
   // the live demo, only where there's a mouse and room for the panel
   var live = document.getElementById('live'), hit = document.getElementById('lineHit');
   var capable = window.matchMedia('(pointer: fine) and (min-width: 900px)');
