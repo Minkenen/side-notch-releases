@@ -29,6 +29,9 @@ h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-b
 .alt{font-size:14px;color:var(--dim);text-decoration:underline;text-underline-offset:3px}
 .alt:hover{color:var(--text)}
 .ver{font-size:13px;color:var(--faint)}
+.beta{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:10px;background:rgba(255,159,10,.15);color:#FF9F0A;font-size:11px;font-weight:700;letter-spacing:.04em;vertical-align:middle}
+.note{margin-top:14px;padding:12px 14px;border-radius:12px;background:rgba(255,159,10,.08);border:1px solid rgba(255,159,10,.25);color:var(--dim);font-size:14px}
+.note b{color:var(--text)}
 .icon{justify-self:center;width:min(320px,70vw);filter:drop-shadow(0 30px 60px rgba(90,88,255,.25))}
 section{padding:56px 0;border-top:1px solid var(--line)}
 h2{font-size:28px;letter-spacing:-.02em;margin:0 0 10px}
@@ -54,7 +57,7 @@ footer{padding:36px 0 56px;color:var(--faint);font-size:13px;border-top:1px soli
 </head>
 <body>
 <span class="edge" aria-hidden="true"></span>
-<header class="wrap"><a class="brand" href="#"><img src="icon.png" alt="">Side Notch</a></header>
+<header class="wrap"><a class="brand" href="#"><img src="icon.png" alt="">Side Notch<span class="beta">BETA</span></a></header>
 <main class="wrap">
   <div class="hero">
     <div>
@@ -66,7 +69,7 @@ footer{padding:36px 0 56px;color:var(--faint);font-size:13px;border-top:1px soli
           <span id="primaryText">Download for Mac</span> <small id="primaryNote">Apple silicon &amp; Intel</small>
         </a>
         <a class="alt" id="secondary" href="https://github.com/minkenen/side-notch-releases/releases/latest/download/Side-Notch-Setup.exe">Also for Windows</a>
-        <span class="ver" id="ver">Free · updates itself</span>
+        <span class="ver" id="ver">Free beta · updates itself</span>
       </div>
     </div>
     <img class="icon" src="icon.png" alt="The Side Notch icon: a dark tile with a glowing line at its left edge">
@@ -106,13 +109,15 @@ footer{padding:36px 0 56px;color:var(--faint);font-size:13px;border-top:1px soli
 
   <section aria-labelledby="get">
     <h2 id="get">Install once. It keeps itself up to date.</h2>
-    <p class="sub">When a new version is out, Side Notch downloads it in the background. A red dot appears on the settings button, and one click restarts into the new version. You never need to come back here.</p>
+    <p class="sub">When a new version is out, a red dot appears on Side Notch's settings button. You never need to come back here.</p>
+    <div class="note"><b>Side Notch is in beta.</b> On Windows, the update downloads in the background and one click restarts into it. On Mac, during the beta, the button downloads the new version and you drag it to Applications, replacing the old one (your settings stay). Once the Mac app is signed by Apple, Mac updates will be one click too, and macOS won't ask for approval.</div>
     <div class="two">
       <div class="box">
         <h3>Mac</h3>
         <ol>
           <li>Open <b>Side-Notch-mac.dmg</b> and drag Side Notch to Applications.</li>
-          <li>Open it. Point at the left edge of your screen, or press <b>⌥ Space</b>.</li>
+          <li>Open it. Because the beta isn't signed by Apple yet, macOS stops it the first time. Open <b>System Settings → Privacy &amp; Security</b>, scroll down and click <b>Open Anyway</b> next to Side Notch, then confirm. You only do this once.</li>
+          <li>Point at the left edge of your screen, or press <b>⌥ Space</b>.</li>
           <li>Some boxes ask for permission the first time, like Messages (Accessibility) or Photos. You choose.</li>
         </ol>
       </div>
@@ -155,7 +160,7 @@ footer{padding:36px 0 56px;color:var(--faint);font-size:13px;border-top:1px soli
     var s = document.getElementById('secondary'); s.href = base + 'Side-Notch-mac.dmg'; s.textContent = 'Also for Mac';
   }
   fetch('https://api.github.com/repos/minkenen/side-notch-releases/releases/latest').then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
-    if (j && j.tag_name) document.getElementById('ver').textContent = 'Version ' + j.tag_name.replace(/^v/, '') + ' · Free · updates itself';
+    if (j && j.tag_name) document.getElementById('ver').textContent = 'Beta ' + j.tag_name.replace(/^v/, '') + ' · Free · updates itself';
   }).catch(function () {});
 })();
 </script>
