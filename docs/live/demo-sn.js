@@ -6,7 +6,15 @@
   // no camera in the demo: the mirror box just says there's none
   try { Object.defineProperty(navigator, 'mediaDevices', { configurable: true, value: { getUserMedia: () => Promise.reject(new Error('No camera in the demo')), enumerateDevices: () => Promise.resolve([]), addEventListener() {}, removeEventListener() {} } }); } catch (e) { /* keep going */ }
   const up = (m) => { try { parent.postMessage(Object.assign({ sn: true }, m), '*'); } catch (e) { /* not framed */ } };
-  window.addEventListener('message', (e) => { if (e.data && e.data.snEdge) emit('edge'); if (e.data && e.data.snClose) emit('dropOnly'); });
+  let clips = null, msgs = null;
+  window.addEventListener('message', (e) => {
+    const d = e.data || {};
+    if (d.snEdge) emit('edge');
+    if (d.snClose) emit('dropOnly');
+    // for the hero video: something gets copied, a message arrives
+    if (d.snCopy) { const item = { id: Date.now(), t: 'text', text: d.snCopy }; clips = [item].concat(clips || []); emit('clip', { items: clips, added: item }); }
+    if (d.snMsg) { const m = Object.assign({ id: 'v' + Date.now(), at: Date.now(), read: false }, d.snMsg); msgs = [m].concat(msgs || []); emit('messages', { items: msgs }); }
+  });
   const now = Date.now(), day = (h, m, d) => { const x = new Date(); x.setDate(x.getDate() + (d || 0)); x.setHours(h, m || 0, 0, 0); return x.toISOString(); };
   const art = (a, b) => { const c = document.createElement('canvas'); c.width = c.height = 300; const g = c.getContext('2d'); const gr = g.createLinearGradient(0, 0, 300, 300); gr.addColorStop(0, a); gr.addColorStop(1, b); g.fillStyle = gr; g.fillRect(0, 0, 300, 300); g.globalAlpha = .35; g.fillStyle = '#fff'; g.beginPath(); g.arc(210, 90, 70, 0, 7); g.fill(); g.globalAlpha = .25; g.beginPath(); g.arc(90, 220, 110, 0, 7); g.fill(); return c.toDataURL('image/jpeg', .9); };
   const photo = (a, b, ar) => { const w = 420, h = Math.round(420 / ar); const c = document.createElement('canvas'); c.width = w; c.height = h; const g = c.getContext('2d'); const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, a); gr.addColorStop(1, b); g.fillStyle = gr; g.fillRect(0, 0, w, h); g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); g.moveTo(0, h); g.lineTo(w * .3, h * .55); g.lineTo(w * .55, h * .75); g.lineTo(w * .8, h * .45); g.lineTo(w, h * .7); g.lineTo(w, h); g.fill(); g.fillStyle = 'rgba(255,240,200,.9)'; g.beginPath(); g.arc(w * .75, h * .25, h * .08, 0, 7); g.fill(); return c.toDataURL('image/jpeg', .9); };
@@ -48,11 +56,13 @@
       { uid: 2, fromName: 'Lisbon Rail', subject: 'Your tickets for Saturday', date: new Date(now - 3 * 3600e3).toISOString(), seen: false, preview: 'Porto Campanhã · 09:12 · Coach 4, seats 31–32' },
       { uid: 1, fromName: 'Alex Rivera', subject: 'Photos from the hike', date: new Date(now - 26 * 3600e3).toISOString(), seen: true, preview: 'Here they are. The one by the lighthouse is my favourite.' }
     ]);
-    emit('clip', { items: [{ id: 3, t: 'link', text: 'https://example.com/recipes/pasta-al-limone', domain: 'example.com', title: 'recipes pasta al limone' }, { id: 2, t: 'color', text: '#7D7AFF' }, { id: 1, t: 'text', text: 'Meet at the north entrance at 7' }], added: null });
-    emit('messages', { items: [
+    clips = [{ id: 3, t: 'link', text: 'https://example.com/recipes/pasta-al-limone', domain: 'example.com', title: 'recipes pasta al limone' }, { id: 2, t: 'color', text: '#7D7AFF' }, { id: 1, t: 'text', text: 'Meet at the north entrance at 7' }];
+    emit('clip', { items: clips, added: null });
+    msgs = [
       { id: 'm1', app: 'Discord', title: 'Jordan', subtitle: '#game-night', body: 'Starting at 8, bring snacks!', at: now - 5 * 60e3, read: false },
       { id: 'm2', app: 'Messages', title: 'Sam', subtitle: '', body: 'Table for two at 12:30 ✔️', at: now - 40 * 60e3, read: true }
-    ] });
+    ];
+    emit('messages', { items: msgs });
     emit('stocks', { at: now, idx: [S('^GSPC', 'S&P 500', 5871.2, 5840.6, wave(5840, 1, 12)), S('BTC-USD', 'BTC', 91240, 89980, wave(89900, 2, 600))],
       list: [S('AAPL', 'AAPL', 229.87, 227.4, wave(227, 0, 1.2)), S('NVDA', 'NVDA', 146.22, 148.9, wave(149, 3, -1.1)), S('MSFT', 'MSFT', 418.53, 415.2, wave(415, 4, 1.6)), S('TSLA', 'TSLA', 338.74, 341.0, wave(341, 5, -1.2)), S('AMZN', 'AMZN', 204.61, 202.3, wave(202, 6, 1))] });
     emit('sys', { model: 'MacBook Pro', cpu: 18, ram: 54, memTotal: 16, gpu: 12, watts: 9.5, down: 42, up: 6, battery: 82, charging: false });
